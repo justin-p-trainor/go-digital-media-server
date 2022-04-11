@@ -5,35 +5,27 @@ import(
 	"net/http"
 	"os"
 
+	"github.com/justin-p-trainor/go-digital-media-server/internal/db"
+
 	"github.com/gin-gonic/gin"
 )
 
-type track struct {
-	TrackName    string `json:"trackName"`
-	ArtistName   string `json:"artistName"`
-	AlbumName    string `json:"albumName"`
-	Milliseconds uint   `json:"milliseconds"`
-	Bytes        uint   `json:"bytes"`
-}
-
-var tracks = []track{
-	{"Alpha", "One", "Trees", 50000, 120000},
-	{"Omega", "Seven", "Shrubs", 25121, 224095},
-	{"Beta", "Two", "Flowers", 100, 1500},
-}
-
-func getTracks(c *gin.Context) {
-	trackName := c.Param("trackName")
-	log.Println(trackName)
-	c.IndentedJSON(http.StatusOK, tracks)
-}
-
 func main() {
+	db, err := db.NewConnection("./Chinook_Sqlite.sqlite")
+	if err != nil {
+		log.Fatal("Database error: ", err)
+	}
+
+	getTracksHandler := func(c *gin.Context) {
+		trackName := c.Param("trackName")
+		c.IndentedJSON(http.StatusOK, db.GetTracks(trackName))
+	}
+	
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 	log.Println(os.Getwd())
 
-	router.GET("/:trackName", getTracks)
+	router.GET("/:trackName", getTracksHandler)
 
 	router.Run("localhost:4041")
 }
