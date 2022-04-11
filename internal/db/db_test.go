@@ -56,6 +56,7 @@ func TestQuerySingleRecord(t *testing.T) {
 	tracks := getTracks("Wall Of Denial")
 	expectedSize := 1
 	expectedTrack := Track{
+		2538,
 		"Wall Of Denial",
 		"Stevie Ray Vaughan & Double Trouble",
 		"In Step",

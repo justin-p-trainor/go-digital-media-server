@@ -7,10 +7,11 @@ import (
 )
 
 const queryTracks = `
-SELECT Track.Name as TrackName, Track.Milliseconds, Track.Bytes, Artist.Name as ArtistName, Album.Title
+SELECT Track.TrackId, Track.Name as TrackName, Track.Milliseconds, Track.Bytes, Artist.Name as ArtistName, Album.Title
 FROM (SELECT * FROM Track WHERE instr(lower(Track.Name), lower(?))) as Track
 LEFT JOIN Album ON Track.AlbumId = Album.AlbumId
 LEFT JOIN Artist ON Album.ArtistId = Artist.ArtistId
+ORDER BY TrackName
 `
 
 // Holds a connection to an SQL database as well as the prepared statements for interacting with the database
@@ -21,6 +22,7 @@ type Connection struct {
 
 // Holds the data that is queryable from the database
 type Track struct {
+	Id           uint   `json:"id"`
 	TrackName    string `json:"trackName"`
 	ArtistName   string `json:"artistName"`
 	AlbumName    string `json:"albumName"`
@@ -56,7 +58,7 @@ func (c *Connection) GetTracks(trackName string) []Track {
 	for rows.Next() {
 		var track Track
 
-		if err := rows.Scan(&track.TrackName, &track.Milliseconds, &track.Bytes, &track.ArtistName, &track.AlbumName); err != nil {
+		if err := rows.Scan(&track.Id, &track.TrackName, &track.Milliseconds, &track.Bytes, &track.ArtistName, &track.AlbumName); err != nil {
 			return result
 		}
 

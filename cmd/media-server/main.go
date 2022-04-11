@@ -15,6 +15,10 @@ func main() {
 		log.Fatal("Database error: ", err)
 	}
 
+	getEmptyHandler := func (c *gin.Context) {
+		c.IndentedJSON(http.StatusOK, db.GetTracks(""))
+	}
+
 	getTracksHandler := func(c *gin.Context) {
 		trackName := c.Param("trackName")
 		c.IndentedJSON(http.StatusOK, db.GetTracks(trackName))
@@ -23,6 +27,7 @@ func main() {
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 
+	router.GET("/", getEmptyHandler)
 	router.GET("/:trackName", getTracksHandler)
 
 	router.Run("localhost:4041")

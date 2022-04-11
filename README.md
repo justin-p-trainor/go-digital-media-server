@@ -6,6 +6,7 @@ For example, the query `http://localhost:4041/dawn` should return:
 ```json
 [
     {
+        "id": 5,
         "trackName": "Princess of the Dawn",
         "artistName": "Accept",
         "albumName": "Restless and Wild",
@@ -13,6 +14,7 @@ For example, the query `http://localhost:4041/dawn` should return:
         "bytes": 6290521
     },
     {
+        "id": 2475,
         "trackName": "Slow Dawn",
         "artistName": "Smashing Pumpkins",
         "albumName": "Judas 0: B-Sides and Rarities",
