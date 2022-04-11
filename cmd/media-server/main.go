@@ -3,7 +3,6 @@ package main
 import(
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/justin-p-trainor/go-digital-media-server/internal/db"
 
@@ -23,7 +22,6 @@ func main() {
 	
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
-	log.Println(os.Getwd())
 
 	router.GET("/:trackName", getTracksHandler)
 
